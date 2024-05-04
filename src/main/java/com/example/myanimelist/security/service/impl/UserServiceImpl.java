@@ -1,5 +1,6 @@
 package com.example.myanimelist.security.service.impl;
 
+import com.example.myanimelist.mapping.UserMapper;
 import com.example.myanimelist.security.user.dto.UserDto;
 import com.example.myanimelist.security.entities.User;
 import com.example.myanimelist.security.repository.UserRepository;
@@ -15,7 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.management.relation.RoleNotFoundException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Transactional
 @Service
@@ -51,9 +54,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(String username) {
-        return userRepository
+    public UserDto getUser(String username) {
+        User user = userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+
+        return UserMapper.INSTANCE.toUserDto(user);
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtoList = new ArrayList<>();
+
+        for (User user : users) {
+            UserDto userDto = UserMapper.INSTANCE.toUserDto(user);
+            userDtoList.add(userDto);
+        }
+
+        return userDtoList;
     }
 }
