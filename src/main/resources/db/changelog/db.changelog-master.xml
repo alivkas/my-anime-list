@@ -5,5 +5,6 @@
 
     <include file="v1/create-user-and-role-table.xml" relativeToChangelogFile="true"/>
     <include file="v1/add-any-roles.xml" relativeToChangelogFile="true"/>
+    <include file="v1/add-column-email.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

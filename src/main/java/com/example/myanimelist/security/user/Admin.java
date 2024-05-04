@@ -12,6 +12,8 @@ public class Admin {
 
     public static String PASSWORD;
 
+    public static String EMAIL;
+
     @Value("${superuser.admin.username}")
     public void setUsername(String username) {
         Admin.USERNAME = username;
@@ -20,5 +22,10 @@ public class Admin {
     @Value("${superuser.admin.password}")
     public void setPassword(String password) {
         Admin.PASSWORD = password;
+    }
+
+    @Value("${superuser.admin.email}")
+    public void setEmail(String email) {
+        Admin.EMAIL = email;
     }
 }

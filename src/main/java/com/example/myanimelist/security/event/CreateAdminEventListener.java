@@ -40,11 +40,13 @@ public class CreateAdminEventListener {
             admin.setAuthorities(Collections.singleton(userRoleRepository
                     .findByRole("ROLE_ADMIN")
                     .orElseThrow(RoleInfoNotFoundException::new)));
+            admin.setEmail(EMAIL);
 
             userRepository.save(admin);
 
             log.info("Admin create");
+        } else {
+            log.info("Admin exists");
         }
-        log.info("Admin exists");
     }
 }

@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
         user.setAuthorities(Collections.singleton(userRoleRepository
                 .findByRole("ROLE_USER")
                 .orElseThrow(RoleNotFoundException::new)));
+        user.setEmail(userDto.email());
 
         userRepository.save(user);
     }
