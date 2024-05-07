@@ -1,6 +1,5 @@
 package com.example.myanimelist.web.controller;
 
-import com.example.myanimelist.security.entities.User;
 import com.example.myanimelist.security.service.UserService;
 import com.example.myanimelist.security.user.dto.UserDto;
 import lombok.AccessLevel;

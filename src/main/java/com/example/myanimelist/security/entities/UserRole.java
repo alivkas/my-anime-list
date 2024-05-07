@@ -1,5 +1,6 @@
 package com.example.myanimelist.security.entities;
 
+import com.example.myanimelist.api.entities.base.BasicEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,11 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserRole implements GrantedAuthority {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class UserRole extends BasicEntity implements GrantedAuthority {
 
     @Column(name = "role")
     String role;

@@ -1,5 +1,6 @@
 package com.example.myanimelist.security.entities;
 
+import com.example.myanimelist.api.entities.base.BasicEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,11 +16,7 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
-public class User implements UserDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class User extends BasicEntity implements UserDetails {
 
     @Column(name = "username", unique = true)
     String username;

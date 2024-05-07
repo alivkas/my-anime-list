@@ -1,0 +1,20 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+  datasource:
+    url: jdbc:postgresql://${PG_HOSTNAME}:${PG_PORT}/${PG_DB}
+    username: ${PG_USERNAME}
+    password: ${PG_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+
+superuser:
+  admin:
+    username: ${ADMIN_USERNAME}
+    password: ${ADMIN_PASSWORD}
+    email: ${ADMIN_EMAIL}
