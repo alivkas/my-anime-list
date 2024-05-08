@@ -39,4 +39,19 @@ public class AdminController {
     public void createTitle(@RequestBody TitleDto titleDto) {
         titleServiceImpl.addTitle(titleDto);
     }
+
+    @GetMapping("/show-titles")
+    public List<TitleDto> getTitles() {
+        return titleServiceImpl.getTitles();
+    }
+
+    @GetMapping("/show-title")
+    public TitleDto getTitle(@RequestParam String name) {
+        return titleServiceImpl.getTitle(name);
+    }
+
+    @DeleteMapping("/delete-title")
+    public void deleteTitle(@RequestParam String name) {
+        titleServiceImpl.deleteTitle(name);
+    }
 }

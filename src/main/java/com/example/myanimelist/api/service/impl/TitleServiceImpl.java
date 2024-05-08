@@ -8,12 +8,16 @@ import com.example.myanimelist.api.repository.GenreRepository;
 import com.example.myanimelist.api.repository.StudioRepository;
 import com.example.myanimelist.api.repository.TitleRepository;
 import com.example.myanimelist.api.service.TitleService;
+import com.example.myanimelist.error.exception.TitleNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Transactional
@@ -60,5 +64,47 @@ public class TitleServiceImpl implements TitleService {
         }
 
         titleRepository.save(title);
+    }
+
+    @Override
+    public List<TitleDto> getTitles() {
+        List<Title> titles = titleRepository.findAll();
+        List<TitleDto> titleDtos = new ArrayList<>();
+
+        for (Title title : titles) {
+            TitleDto titleDto = new TitleDto(title.getName(),
+                    title.getDate(),
+                    title.getStudio().getName(),
+                    title.getGenres().stream()
+                            .map(Genre::getName).
+                            toList());
+            titleDtos.add(titleDto);
+        }
+
+        return titleDtos;
+    }
+
+    @Override
+    public TitleDto getTitle(String name) {
+        if (!titleRepository.existsByName(name)) {
+            throw new TitleNotFoundException(name);
+        }
+
+        Title title = titleRepository.findByName(name);
+
+        return new TitleDto(title.getName(),
+                title.getDate(),
+                title.getStudio().getName(),
+                title.getGenres().stream()
+                        .map(Genre::getName)
+                        .toList());
+    }
+
+    @Override
+    public void deleteTitle(String name) {
+        if (!titleRepository.existsByName(name)) {
+            throw new TitleNotFoundException(name);
+        }
+        titleRepository.deleteByName(name);
     }
 }

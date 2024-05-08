@@ -1,5 +1,6 @@
 package com.example.myanimelist.error;
 
+import com.example.myanimelist.error.exception.TitleNotFoundException;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +18,6 @@ import java.util.List;
 @RestControllerAdvice
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExceptionAdvice {
-
-    String VALIDATION_ERROR = "validation_error";
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -41,5 +40,11 @@ public class ExceptionAdvice {
                 .stream()
                 .map(x -> new ExceptionResponse(x.getDefaultMessage(), x.getCode()))
                 .toList();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse handleTitleNotFound(TitleNotFoundException ex) {
+        return new ExceptionResponse(ex.getMessage(), ex.CODE);
     }
 }
