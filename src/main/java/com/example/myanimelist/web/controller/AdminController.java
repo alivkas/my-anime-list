@@ -1,5 +1,7 @@
 package com.example.myanimelist.web.controller;
 
+import com.example.myanimelist.api.dto.TitleDto;
+import com.example.myanimelist.api.service.TitleService;
 import com.example.myanimelist.security.service.UserService;
 import com.example.myanimelist.security.user.dto.UserDto;
 import lombok.AccessLevel;
@@ -16,6 +18,7 @@ import java.util.List;
 public class AdminController {
 
     UserService userServiceImpl;
+    TitleService titleServiceImpl;
 
     @DeleteMapping
     public void deleteUser(@RequestParam String username) {
@@ -30,5 +33,10 @@ public class AdminController {
     @GetMapping("/show-all")
     public List<UserDto> getUsers() {
         return userServiceImpl.getAllUsers();
+    }
+
+    @PostMapping("/create-title")
+    public void createTitle(@RequestBody TitleDto titleDto) {
+        titleServiceImpl.addTitle(titleDto);
     }
 }
