@@ -15,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import static com.example.myanimelist.config.common.RabbitNames.*;
@@ -73,6 +76,7 @@ public class TitleServiceImpl implements TitleService {
     }
 
     @Override
+    @Cacheable(cacheNames = "title_list")
     public List<TitleDto> getTitles() {
         List<Title> titles = titleRepository.findAll();
         List<TitleDto> titleDtos = new ArrayList<>();
@@ -91,6 +95,7 @@ public class TitleServiceImpl implements TitleService {
     }
 
     @Override
+    @Cacheable(cacheNames = "titles")
     public TitleDto getTitle(String name) {
         if (!titleRepository.existsByName(name)) {
             throw new TitleNotFoundException(name);
@@ -107,6 +112,7 @@ public class TitleServiceImpl implements TitleService {
     }
 
     @Override
+    @CacheEvict(cacheNames = { "titles", "title_list" })
     public void deleteTitle(String name) {
         if (!titleRepository.existsByName(name)) {
             throw new TitleNotFoundException(name);

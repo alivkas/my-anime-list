@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -53,6 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @SneakyThrows
     @Override
+    @CacheEvict(cacheNames = { "users", "user_list" })
     public void deleteUser(String username) {
         if (!userRepository.existsByUsername(username)) {
             throw new UsernameNotFoundException("Username not found");
@@ -63,6 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(cacheNames = "users")
     public UserDto getUser(String username) {
         User user = userRepository
                 .findByUsername(username)
@@ -72,6 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(cacheNames = "user_list")
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
         List<UserDto> userDtoList = new ArrayList<>();
