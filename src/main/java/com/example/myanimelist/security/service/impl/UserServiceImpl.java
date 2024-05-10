@@ -11,9 +11,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static com.example.myanimelist.config.common.RabbitNames.*;
 
 import javax.management.relation.RoleNotFoundException;
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     UserRoleRepository userRoleRepository;
     PasswordEncoder passwordEncoder;
+    RabbitTemplate rabbitTemplate;
 
     @SneakyThrows
     @Override
@@ -43,6 +47,8 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.email());
 
         userRepository.save(user);
+
+        rabbitTemplate.convertAndSend(USER_EXCHANGE_NAME, USER_CREATE_KEY, userDto);
     }
 
     @SneakyThrows
@@ -52,6 +58,8 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("Username not found");
         }
         userRepository.deleteByUsername(username);
+
+        rabbitTemplate.convertAndSend(USER_EXCHANGE_NAME, USER_DELETE_KEY, username);
     }
 
     @Override

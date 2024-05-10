@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBIT_DEFAULT_PASS=guest
+    networks:
+      - my-network
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+networks:
+  my-network:
+    driver: bridge

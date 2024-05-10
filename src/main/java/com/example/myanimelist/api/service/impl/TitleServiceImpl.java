@@ -14,7 +14,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+
+import static com.example.myanimelist.config.common.RabbitNames.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,7 @@ public class TitleServiceImpl implements TitleService {
     TitleRepository titleRepository;
     StudioRepository studioRepository;
     GenreRepository genreRepository;
+    RabbitTemplate rabbitTemplate;
 
     @Override
     public void addTitle(TitleDto titleDto) {
@@ -64,6 +68,8 @@ public class TitleServiceImpl implements TitleService {
         }
 
         titleRepository.save(title);
+
+        rabbitTemplate.convertAndSend(TITLE_EXCHANGE_NAME, TITLE_CREATE_KEY, titleDto);
     }
 
     @Override
@@ -106,5 +112,7 @@ public class TitleServiceImpl implements TitleService {
             throw new TitleNotFoundException(name);
         }
         titleRepository.deleteByName(name);
+
+        rabbitTemplate.convertAndSend(TITLE_EXCHANGE_NAME, TITLE_DELETE_KEY, name);
     }
 }
