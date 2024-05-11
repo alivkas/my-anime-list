@@ -19,6 +19,11 @@ superuser:
     password: ${ADMIN_PASSWORD}
     email: ${ADMIN_EMAIL}
 
+schedule:
+  cron:
+    time: "0 0 3 7 * *"
+    zone: "Europe/Moscow"
+
 management:
   endpoints:
     web:
