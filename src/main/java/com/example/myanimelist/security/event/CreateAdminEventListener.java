@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class CreateAdminEventListener {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
+    @Async
     @SneakyThrows
     @EventListener
     public void handleStartApplicationContext(ContextRefreshedEvent event) {
@@ -44,8 +46,10 @@ public class CreateAdminEventListener {
 
             userRepository.save(admin);
 
+            Thread.sleep(1000);
             log.info("Admin create");
         } else {
+            Thread.sleep(1000); // Для вывода после компиляции
             log.info("Admin exists");
         }
     }
